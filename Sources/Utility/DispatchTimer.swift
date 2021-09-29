@@ -1,4 +1,5 @@
 import Foundation
+import PropertyWrappers
 
 /// Mimics the API of DispatchSourceTimer but in a way that prevents
 /// crashes that occur from calling resume multiple times on a timer that is

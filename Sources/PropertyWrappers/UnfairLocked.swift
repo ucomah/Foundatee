@@ -1,6 +1,5 @@
 import Foundation
 
-@available(iOS 10.0, *)
 @propertyWrapper
 public final class UnfairLocked<Value> {
 
