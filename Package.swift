@@ -19,11 +19,13 @@ let package = Package(
             name: packageName,
             dependencies: [
                 "CodableExtensions",
-                "PropertyWrappers"
+                "PropertyWrappers",
+                "Utility",
             ]
         ),
         .target(name: "CodableExtensions"),
         .target(name: "PropertyWrappers"),
+        .target(name: "Utility"),
         .testTarget(
             name: "FoundateeTests",
             dependencies: ["Foundatee"]
