@@ -17,9 +17,14 @@ let package = Package(
     targets: [
         .target(
             name: packageName,
-            dependencies: []),
+            dependencies: [
+                "CodableExtensions"
+            ]
+        ),
+        .target(name: "CodableExtensions"),
         .testTarget(
             name: "FoundateeTests",
-            dependencies: ["Foundatee"]),
+            dependencies: ["Foundatee"]
+        ),
     ]
 )
