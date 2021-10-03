@@ -26,7 +26,10 @@ let package = Package(
         ),
         .target(name: "CodableExtensions"),
         .target(name: "PropertyWrappers"),
-        .target(name: "Utility"),
+        .target(
+            name: "Utility",
+            dependencies: ["PropertyWrappers"]
+        ),
         .testTarget(
             name: "FoundateeTests",
             dependencies: ["Foundatee"]
