@@ -1,6 +1,9 @@
 import Foundation
+#if canImport(Combine)
+import Combine
+#endif
 
-public class FolderWatchdog {
+open class FolderWatchdog {
 
     public typealias FolderChangeClosure = (() -> Void)
 
@@ -15,6 +18,7 @@ public class FolderWatchdog {
     private var URL: URL
     /// A closure responsible for responding to `FolderWatchdog` updates
     public var onChages: FolderChangeClosure?
+
 
     // MARK: Lifecycle
 
@@ -38,7 +42,7 @@ public class FolderWatchdog {
             watchdogSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: monitoredDirectoryFileDescriptor, eventMask: [.write], queue: queue)
 
             watchdogSource?.setEventHandler { [weak self] in
-                self?.onChages?()
+                self?.handleCange()
             }
 
             watchdogSource?.setCancelHandler {
@@ -55,4 +59,31 @@ public class FolderWatchdog {
     public func stop() {
         watchdogSource?.cancel()
     }
+    
+    fileprivate func handleCange() {
+        self.onChages?()
+    }
 }
+
+#if canImport(Combine)
+
+@available(iOS 13.0, *)
+open class DirectoryWatchdog: FolderWatchdog {
+    
+    @available(iOS 13.0, *)
+    var changePublisher: AnyPublisher<Void, Error> {
+        changeSubject.eraseToAnyPublisher()
+    }
+
+    private let changeSubject = PassthroughSubject<Void, Error>()
+
+    public init(url: URL) {
+        super.init(URL: url, nil)
+    }
+    
+    override func handleCange() {
+        super.handleCange()
+        changeSubject.send(completion: .finished)
+    }
+}
+#endif // canImport(Combine)
