@@ -1,5 +1,8 @@
 import Foundation
 import PropertyWrappers
+#if canImport(Combine)
+import Combine
+#endif
 
 /// Mimics the API of DispatchSourceTimer but in a way that prevents
 /// crashes that occur from calling resume multiple times on a timer that is
@@ -25,11 +28,25 @@ open class DispatchTimer {
             if this.tolerance > 0 {
                 this.tolerance = max(0, this.tolerance - this.timeInterval)
             } else {
+                #if canImport(Combine)
+                if #available(iOS 13.0, *) {
+                    self?.eventSubject.send(this)
+                }
+                #endif
                 self?.eventHandler?(this)
             }
         }
         return t
     }()
+    
+    #if canImport(Combine)
+    @available(iOS 13.0, *)
+    public var eventPublisher: AnyPublisher<DispatchTimer, Never> {
+        eventSubject.eraseToAnyPublisher()
+    }
+    @available(iOS 13.0, *)
+    private final lazy var eventSubject = PassthroughSubject<DispatchTimer, Never>()
+    #endif
 
     open var eventHandler: ((DispatchTimer) -> Void)?
 
