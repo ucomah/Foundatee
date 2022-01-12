@@ -67,10 +67,9 @@ open class FolderWatchdog {
 
 #if canImport(Combine)
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, macOS 10.15, *)
 open class DirectoryWatchdog: FolderWatchdog {
     
-    @available(iOS 13.0, *)
     var changePublisher: AnyPublisher<Void, Error> {
         changeSubject.eraseToAnyPublisher()
     }

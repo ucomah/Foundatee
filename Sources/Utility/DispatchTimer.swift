@@ -29,7 +29,7 @@ open class DispatchTimer {
                 this.tolerance = max(0, this.tolerance - this.timeInterval)
             } else {
                 #if canImport(Combine)
-                if #available(iOS 13.0, *) {
+                if #available(iOS 13.0, macOS 10.15, *) {
                     self?.eventSubject.send(this)
                 }
                 #endif
@@ -40,11 +40,11 @@ open class DispatchTimer {
     }()
     
     #if canImport(Combine)
-    @available(iOS 13.0, *)
+    @available(iOS 13.0, macOS 10.15, *)
     public var eventPublisher: AnyPublisher<DispatchTimer, Never> {
         eventSubject.eraseToAnyPublisher()
     }
-    @available(iOS 13.0, *)
+    @available(iOS 13.0, macOS 10.15, *)
     private final lazy var eventSubject = PassthroughSubject<DispatchTimer, Never>()
     #endif
 
