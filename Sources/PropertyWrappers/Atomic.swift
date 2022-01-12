@@ -22,8 +22,8 @@ public struct Atomic<Value> {
     }
 
     public func load() -> Value {
-        if readLock { lock.lock() }
-        defer { if readLock { lock.unlock() } }
+        let isLocked = readLock ? lock.try() : false
+        defer { if isLocked { lock.unlock() } }
         return value
     }
 
