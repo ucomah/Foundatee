@@ -4,15 +4,14 @@ import Combine
 #endif
 
 @propertyWrapper
-public class Atomic<Value> {
+public final class Atomic<Value: Sendable> {
 
     private var value: Value
     private let lock = NSLock()
     public var readLock = true
     #if canImport(Combine)
-    @available(iOS 13.0, macOS 10.15, *)
-    private lazy final var publisher = PassthroughSubject<Value, Never>()
-    @available(iOS 13.0, macOS 10.15, *)
+    private let publisher = PassthroughSubject<Value, Never>()
+    
     public var projectedValue: AnyPublisher<Value, Never> {
         publisher.eraseToAnyPublisher()
     }
@@ -43,9 +42,7 @@ public class Atomic<Value> {
         defer { if isLocked { self.lock.unlock() } }
         value = newValue
         #if canImport(Combine)
-        if #available(iOS 13.0, macOS 10.15, *) {
-            publisher.send(newValue)
-        }
+        publisher.send(newValue)
         #endif
     }
 }
