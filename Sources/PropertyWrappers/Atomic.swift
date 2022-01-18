@@ -10,8 +10,10 @@ public final class Atomic<Value: Sendable> {
     private let lock = NSLock()
     public var readLock = true
     #if canImport(Combine)
-    private let publisher = PassthroughSubject<Value, Never>()
+    @available(iOS 13.0, macOS 10.15, *)
+    private lazy final var publisher = PassthroughSubject<Value, Never>()
     
+    @available(iOS 13.0, macOS 10.15, *)
     public var projectedValue: AnyPublisher<Value, Never> {
         publisher.eraseToAnyPublisher()
     }
@@ -42,7 +44,9 @@ public final class Atomic<Value: Sendable> {
         defer { if isLocked { self.lock.unlock() } }
         value = newValue
         #if canImport(Combine)
-        publisher.send(newValue)
+        if #available(iOS 13.0, macOS 10.15, *) {
+            publisher.send(newValue)
+        }
         #endif
     }
 }
