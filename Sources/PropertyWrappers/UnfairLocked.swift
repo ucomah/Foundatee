@@ -1,5 +1,6 @@
 import Foundation
 
+#if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 @propertyWrapper
 public final class UnfairLocked<Value> {
 
@@ -21,3 +22,4 @@ public final class UnfairLocked<Value> {
         return try block(&_value)
     }
 }
+#endif
