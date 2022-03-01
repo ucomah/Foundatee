@@ -1,5 +1,6 @@
 import Foundation
 
+#if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 extension String {
 
     public var isBase64EncodedString: Bool {
@@ -8,3 +9,4 @@ extension String {
         return predicate.evaluate(with: self)
     }
 }
+#endif
