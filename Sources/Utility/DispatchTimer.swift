@@ -22,7 +22,11 @@ open class DispatchTimer {
 
     private lazy var timer: DispatchSourceTimer = {
         let t = DispatchSource.makeTimerSource()
-        t.schedule(deadline: .now() + self.timeInterval, repeating: self.timeInterval)
+        if self.repeating {
+            t.schedule(deadline: .now() + self.timeInterval, repeating: self.timeInterval)
+        } else {
+            t.schedule(deadline: .now() + self.timeInterval)
+        }
         t.setEventHandler { [weak self] in
             guard let this = self else { return }
             if this.tolerance > 0 {
