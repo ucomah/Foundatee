@@ -7,7 +7,7 @@ let packageName = "Foundatee"
 
 let package = Package(
     name: packageName,
-    platforms: [.iOS(.v10), .macOS(.v10_13)],
+    platforms: [.iOS(.v13), .macOS(.v10_15)],
     products: [
         .library(
             name: packageName,
