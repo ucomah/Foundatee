@@ -32,12 +32,14 @@ open class DispatchTimer {
             if this.tolerance > 0 {
                 this.tolerance = max(0, this.tolerance - this.timeInterval)
             } else {
-                #if canImport(Combine)
-                if #available(iOS 13.0, macOS 10.15, *) {
-                    self?.eventSubject.send(this)
+                DispatchQueue.main.async {
+                    #if canImport(Combine)
+                    if #available(iOS 13.0, macOS 10.15, *) {
+                        self?.eventSubject.send(this)
+                    }
+                    #endif
+                    self?.eventHandler?(this)
                 }
-                #endif
-                self?.eventHandler?(this)
             }
         }
         return t
